@@ -82,6 +82,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
 
+    // work-work
+    implementation(libs.work.runtime)
+
     // system bar color change
     implementation(libs.accompanist.systemuicontroller)
 }

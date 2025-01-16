@@ -1,6 +1,7 @@
 package com.rsstudio.tradex.di
 
 import com.rsstudio.tradex.data.restclient.AppApiClientService
+import com.rsstudio.tradex.data.sources.local.UserHoldingsLocalDataSource
 import com.rsstudio.tradex.data.sources.remote.UserHoldingsRemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -14,4 +15,7 @@ object DataSourceModule {
     fun userHoldingsRemoteDataSource(
         service: AppApiClientService
     ) = UserHoldingsRemoteDataSource(service)
+
+    @Provides
+    fun userHoldingsLocalDataSource() = UserHoldingsLocalDataSource()
 }

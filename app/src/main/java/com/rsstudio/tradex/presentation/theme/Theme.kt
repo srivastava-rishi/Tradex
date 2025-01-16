@@ -1,4 +1,4 @@
-package com.rsstudio.tradex.ui.theme
+package com.rsstudio.tradex.presentation.theme
 
 import android.app.Activity
 import android.os.Build

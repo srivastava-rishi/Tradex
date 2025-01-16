@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">TradeX</string>
+    <string name="portfolio">Portfolio</string>
+    <string name="net_qty">NET QTY:</string>
+    <string name="ltp">LTP:</string>
+    <string name="pl">P&amp;L:</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="orders">Orders</string>
+    <string name="funds">Funds</string>
+    <string name="invest">Invest</string>
 </resources>

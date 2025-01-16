@@ -1,4 +1,4 @@
-package com.rsstudio.tradex.ui.theme
+package com.rsstudio.tradex.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -32,3 +32,26 @@ val Typography = Typography(
     )
     */
 )
+
+val Typography.subTitle: TextStyle
+    get() = TextStyle(
+        fontWeight = FontWeight.W500,
+        fontSize = 16.sp,
+        color = slateGray
+    )
+
+val Typography.captionDefault: TextStyle
+    get() = TextStyle(
+        fontWeight = FontWeight.W400,
+        fontSize = 10.sp,
+        letterSpacing = 0.3.sp,
+        color = lightGray,
+        lineHeight = 20.sp,
+    )
+
+val Typography.ParagraphSmallRegular: TextStyle
+    get() = TextStyle(
+        fontWeight = FontWeight.W400,
+        fontSize = 12.sp,
+        letterSpacing = 0.3.sp,
+    )
