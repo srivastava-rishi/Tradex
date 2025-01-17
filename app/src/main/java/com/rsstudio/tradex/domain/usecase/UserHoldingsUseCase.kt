@@ -6,5 +6,5 @@ import javax.inject.Inject
 class UserHoldingsUseCase @Inject constructor(
     private val repository: UserHoldingsRepository
 ) {
-    operator fun invoke() = repository.fetchUserHoldings()
+    suspend operator fun invoke() = repository.fetchUserHoldings()
 }

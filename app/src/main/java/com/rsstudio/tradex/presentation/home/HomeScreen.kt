@@ -42,6 +42,8 @@ import androidx.compose.ui.text.withStyle
 import com.rsstudio.tradex.component.bottomnav.BottomNavigation
 import com.rsstudio.tradex.component.bottomnav.ExpandableHeader
 import com.rsstudio.tradex.component.bottomnav.ExpandableRowConfig
+import com.rsstudio.tradex.component.loader.DefaultCircularIndefiniteBar
+import com.rsstudio.tradex.component.loader.ErrorMessage
 import com.rsstudio.tradex.presentation.theme.ParagraphSmallRegular
 import com.rsstudio.tradex.presentation.theme.captionBold
 import com.rsstudio.tradex.presentation.theme.crimsonRed
@@ -68,86 +70,100 @@ fun HomeScreen(
             darkIcons = true
         )
     }
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.background(Color.Blue),
-                title = {
-                    Row {
-                        Spacer(modifier = Modifier.size(12.dp))
-                        Text(
-                            text = stringResource(AppString.portfolio),
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontSize = 16.sp,
-                                color = white
-                            )
-                        )
-                    }
-                },
-                navigationIcon = {
-                    Row {
-                        Spacer(modifier = Modifier.size(12.dp))
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            painter = painterResource(id = AppDrawable.ic_account_circle),
-                            contentDescription = "",
-                            tint = white
-                        )
-                    }
+    when (uiState.screenState) {
+        ScreenState.LOADING -> {
+            DefaultCircularIndefiniteBar()
+        }
 
-                },
-                actions = {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = AppDrawable.ic_swap),
-                        contentDescription = "",
-                        tint = white
+        ScreenState.ERROR -> {
+            ErrorMessage(errorMessage = stringResource(id = AppString.no_data_found))
+        }
+
+        ScreenState.NONE -> {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        modifier = Modifier.background(Color.Blue),
+                        title = {
+                            Row {
+                                Spacer(modifier = Modifier.size(12.dp))
+                                Text(
+                                    text = stringResource(AppString.portfolio),
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontSize = 16.sp,
+                                        color = white
+                                    )
+                                )
+                            }
+                        },
+                        navigationIcon = {
+                            Row {
+                                Spacer(modifier = Modifier.size(12.dp))
+                                Icon(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = painterResource(id = AppDrawable.ic_account_circle),
+                                    contentDescription = "",
+                                    tint = white
+                                )
+                            }
+
+                        },
+                        actions = {
+                            Icon(
+                                modifier = Modifier.size(24.dp),
+                                painter = painterResource(id = AppDrawable.ic_swap),
+                                contentDescription = "",
+                                tint = white
+                            )
+                            VerticalDivider(modifier = Modifier.padding(8.dp))
+                            Icon(
+                                modifier = Modifier.size(24.dp),
+                                painter = painterResource(id = AppDrawable.ic_search),
+                                contentDescription = "",
+                                tint = white
+                            )
+                            Spacer(modifier = Modifier.size(12.dp))
+                        },
+                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                            containerColor = corporateBlue
+                        )
                     )
-                    VerticalDivider(modifier = Modifier.padding(8.dp))
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = AppDrawable.ic_search),
-                        contentDescription = "",
-                        tint = white
-                    )
-                    Spacer(modifier = Modifier.size(12.dp))
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = corporateBlue
-                )
-            )
-        },
-        bottomBar = {
-            BottomNavigation(
-                header = {
-                    ExpandableHeader(
-                        rows = listOf(
-                            ExpandableRowConfig(
-                                AppString.current_value,
-                                uiState.sheetData.currentValue,
-                                valueTextStyle = MaterialTheme.typography.captionBold
-                            ),
-                            ExpandableRowConfig(
-                                AppString.total_investment,
-                                uiState.sheetData.totalInvestment,
-                                valueTextStyle = MaterialTheme.typography.captionBold
-                            ),
-                            ExpandableRowConfig(
-                                AppString.today_profit_and_loss,
-                                uiState.sheetData.todayProfitAndLoss,
-                                valueTextStyle = MaterialTheme.typography.captionBold.copy(color = if (uiState.sheetData.todayProfitAndLoss.isPositiveAmount()) tealGreen else crimsonRed)
-                            ),
-                        ),
-                        totalProfitAndLoss = uiState.sheetData.totalProfitAndLoss,
+                bottomBar = {
+                    BottomNavigation(
+                        header = {
+                            ExpandableHeader(
+                                rows = listOf(
+                                    ExpandableRowConfig(
+                                        AppString.current_value,
+                                        uiState.sheetData.currentValue,
+                                        valueTextStyle = MaterialTheme.typography.captionBold
+                                    ),
+                                    ExpandableRowConfig(
+                                        AppString.total_investment,
+                                        uiState.sheetData.totalInvestment,
+                                        valueTextStyle = MaterialTheme.typography.captionBold
+                                    ),
+                                    ExpandableRowConfig(
+                                        AppString.today_profit_and_loss,
+                                        uiState.sheetData.todayProfitAndLoss,
+                                        valueTextStyle = MaterialTheme.typography.captionBold.copy(
+                                            color = if (uiState.sheetData.todayProfitAndLoss.isPositiveAmount()) tealGreen else crimsonRed
+                                        )
+                                    ),
+                                ),
+                                totalProfitAndLoss = uiState.sheetData.totalProfitAndLoss,
+                            )
+                        }
                     )
                 }
-            )
+            ) { innerPadding ->
+                HomeScreenContent(
+                    uiState = uiState,
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
         }
-    ) { innerPadding ->
-        HomeScreenContent(
-            uiState = uiState,
-            modifier = Modifier.padding(innerPadding)
-        )
     }
 }
 
@@ -367,7 +383,7 @@ fun HomeScreenPreview() {
                         ltp = 2222.99,
                         avgPrice = 12.44,
                         close = 13.44,
-                        totalProfitAndLoss = "78098765434567890.994567890"
+                        totalProfitAndLoss = "78890.994567890"
                     ),
                 )
             ),

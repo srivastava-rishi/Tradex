@@ -1,5 +1,6 @@
 package com.rsstudio.tradex.di
 
+import com.rsstudio.tradex.data.local.dao.UserHoldingDao
 import com.rsstudio.tradex.data.restclient.AppApiClientService
 import com.rsstudio.tradex.data.sources.local.UserHoldingsLocalDataSource
 import com.rsstudio.tradex.data.sources.remote.UserHoldingsRemoteDataSource
@@ -17,5 +18,5 @@ object DataSourceModule {
     ) = UserHoldingsRemoteDataSource(service)
 
     @Provides
-    fun userHoldingsLocalDataSource() = UserHoldingsLocalDataSource()
+    fun userHoldingsLocalDataSource(dao: UserHoldingDao) = UserHoldingsLocalDataSource(dao)
 }

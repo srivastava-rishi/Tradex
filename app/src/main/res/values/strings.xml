@@ -13,4 +13,5 @@
     <string name="current_value">Current value</string>
     <string name="total_investment">Total investment</string>
     <string name="today_profit_and_loss">Today\'s Profit &amp; Loss</string>
+    <string name="no_data_found">No data found</string>
 </resources>
