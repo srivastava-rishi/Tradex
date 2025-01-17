@@ -183,7 +183,7 @@ fun HomeScreenContent(
                     color = gray
                 )
             }
-            Item(
+            PortfolioItem(
                 symbol = it.symbol,
                 quantity = it.quantity.toString(),
                 ltp = it.ltp.formatAsCurrency(),
@@ -194,7 +194,7 @@ fun HomeScreenContent(
 }
 
 @Composable
-fun Item(
+fun PortfolioItem(
     symbol: String,
     quantity: String,
     ltp: String,
@@ -396,5 +396,5 @@ fun HomeScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun ItemPreview() {
-    Item("ASHOKLEY", "3", "₹119.10", "₹12.90")
+    PortfolioItem("ASHOKLEY", "3", "₹119.10", "₹12.90")
 }
