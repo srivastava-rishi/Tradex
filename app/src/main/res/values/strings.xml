@@ -8,4 +8,9 @@
     <string name="orders">Orders</string>
     <string name="funds">Funds</string>
     <string name="invest">Invest</string>
+    <string name="profit_loss">Profit &amp; Loss</string>
+    <string name="symbol_star">*</string>
+    <string name="current_value">Current value</string>
+    <string name="total_investment">Total investment</string>
+    <string name="today_profit_and_loss">Today\'s Profit &amp; Loss</string>
 </resources>

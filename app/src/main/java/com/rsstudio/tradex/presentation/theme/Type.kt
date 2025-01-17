@@ -49,6 +49,13 @@ val Typography.captionDefault: TextStyle
         lineHeight = 20.sp,
     )
 
+val Typography.captionBold: TextStyle
+    get() = TextStyle(
+        fontWeight = FontWeight.W500,
+        fontSize = 14.sp,
+        color = charcoal,
+    )
+
 val Typography.ParagraphSmallRegular: TextStyle
     get() = TextStyle(
         fontWeight = FontWeight.W400,

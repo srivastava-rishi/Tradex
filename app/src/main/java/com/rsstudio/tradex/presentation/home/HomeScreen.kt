@@ -36,14 +36,21 @@ import com.rsstudio.tradex.presentation.theme.subTitle
 import com.rsstudio.tradex.presentation.theme.white
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Divider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import com.rsstudio.tradex.component.bottomnav.BottomNavigation
+import com.rsstudio.tradex.component.bottomnav.ExpandableHeader
+import com.rsstudio.tradex.component.bottomnav.ExpandableRowConfig
 import com.rsstudio.tradex.presentation.theme.ParagraphSmallRegular
+import com.rsstudio.tradex.presentation.theme.captionBold
+import com.rsstudio.tradex.presentation.theme.crimsonRed
 import com.rsstudio.tradex.presentation.theme.gray
 import com.rsstudio.tradex.presentation.theme.paleGray
 import com.rsstudio.tradex.presentation.theme.tealGreen
 import com.rsstudio.tradex.util.CoreUtil.ONE_UNIT_SPACE
+import com.rsstudio.tradex.util.formatAsCurrency
+import com.rsstudio.tradex.util.isPositiveAmount
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,6 +58,7 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val systemUiController = rememberSystemUiController()
+    val uiState = viewModel.uiState
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = corporateBlue
@@ -110,11 +118,34 @@ fun HomeScreen(
             )
         },
         bottomBar = {
-            BottomNavigation()
+            BottomNavigation(
+                header = {
+                    ExpandableHeader(
+                        rows = listOf(
+                            ExpandableRowConfig(
+                                AppString.current_value,
+                                uiState.sheetData.currentValue,
+                                valueTextStyle = MaterialTheme.typography.captionBold
+                            ),
+                            ExpandableRowConfig(
+                                AppString.total_investment,
+                                uiState.sheetData.totalInvestment,
+                                valueTextStyle = MaterialTheme.typography.captionBold
+                            ),
+                            ExpandableRowConfig(
+                                AppString.today_profit_and_loss,
+                                uiState.sheetData.todayProfitAndLoss,
+                                valueTextStyle = MaterialTheme.typography.captionBold.copy(color = if (uiState.sheetData.todayProfitAndLoss.isPositiveAmount()) tealGreen else crimsonRed)
+                            ),
+                        ),
+                        totalProfitAndLoss = uiState.sheetData.totalProfitAndLoss,
+                    )
+                }
+            )
         }
     ) { innerPadding ->
         HomeScreenContent(
-            uiState = viewModel.uiState,
+            uiState = uiState,
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -139,8 +170,8 @@ fun HomeScreenContent(
             Item(
                 symbol = it.symbol,
                 quantity = it.quantity.toString(),
-                ltp = "₹119.10",
-                pl = "₹12.90"
+                ltp = it.ltp.formatAsCurrency(),
+                pl = it.totalProfitAndLoss
             )
         }
     }
@@ -156,10 +187,13 @@ fun Item(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .background(white)
             .padding(horizontal = 12.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column {
+        Column(
+            horizontalAlignment = Alignment.Start
+        ) {
             Text(
                 text = symbol,
                 style = MaterialTheme.typography.subTitle
@@ -182,7 +216,9 @@ fun Item(
                 style = MaterialTheme.typography.subTitle
             )
         }
-        Column {
+        Column(
+            horizontalAlignment = Alignment.End
+        ) {
             Text(
                 text = buildAnnotatedString {
                     withStyle(
@@ -198,7 +234,7 @@ fun Item(
                         append(ltp)
                     }
                 },
-                style = MaterialTheme.typography.subTitle
+                style = MaterialTheme.typography.subTitle,
             )
             Spacer(modifier = Modifier.size(24.dp))
             Text(
@@ -211,7 +247,7 @@ fun Item(
                     append(ONE_UNIT_SPACE)
                     withStyle(
                         style = MaterialTheme.typography.ParagraphSmallRegular.copy(
-                            color = tealGreen,
+                            color = if (pl.isPositiveAmount()) tealGreen else crimsonRed,
                             fontSize = 14.sp
                         )
                             .toSpanStyle()
@@ -280,11 +316,61 @@ fun HomeScreenPreview() {
             )
         },
         bottomBar = {
-            BottomNavigation()
+            BottomNavigation(
+                header = {
+                    ExpandableHeader(
+                        totalProfitAndLoss = "-₹697.06 (2.44%)",
+                        rows = listOf(
+                            ExpandableRowConfig(
+                                AppString.current_value,
+                                "₹27,893.65",
+                                valueTextStyle = MaterialTheme.typography.captionBold
+                            ),
+                            ExpandableRowConfig(
+                                AppString.total_investment,
+                                "₹28,590.71",
+                                valueTextStyle = MaterialTheme.typography.captionBold
+                            ),
+                            ExpandableRowConfig(
+                                AppString.today_profit_and_loss,
+                                "-₹235.65",
+                                valueTextStyle = MaterialTheme.typography.captionBold
+                            ),
+                        )
+                    )
+                }
+            )
         }
     ) { innerPadding ->
         HomeScreenContent(
-            uiState = HomeScreenUiState(),
+            uiState = HomeScreenUiState(
+                userHoldingData = listOf(
+                    UserHoldingsData(
+                        symbol = "MAHABANK",
+                        quantity = 2,
+                        ltp = 23.99,
+                        avgPrice = 12.44,
+                        close = 13.44,
+                        totalProfitAndLoss = "78.99"
+                    ),
+                    UserHoldingsData(
+                        symbol = "RELIANCE",
+                        quantity = 2,
+                        ltp = 23.99,
+                        avgPrice = 12.44,
+                        close = 13.44,
+                        totalProfitAndLoss = "78.99"
+                    ),
+                    UserHoldingsData(
+                        symbol = "RELIANCE",
+                        quantity = 2,
+                        ltp = 2222.99,
+                        avgPrice = 12.44,
+                        close = 13.44,
+                        totalProfitAndLoss = "78098765434567890.994567890"
+                    ),
+                )
+            ),
             modifier = Modifier.padding(innerPadding)
         )
     }

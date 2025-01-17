@@ -104,9 +104,7 @@ fun BottomNavigationItem(
 }
 
 sealed class BottomNavItem(var title: Int, val icon: Int, val active: Boolean) {
-    data object WatchList :
-        BottomNavItem(AppString.watchlist, AppDrawable.ic_format_list_bulleted, false)
-
+    data object WatchList : BottomNavItem(AppString.watchlist, AppDrawable.ic_format_list_bulleted, false)
     data object Orders : BottomNavItem(AppString.orders, AppDrawable.ic_history, false)
     data object PortFolio : BottomNavItem(AppString.portfolio, AppDrawable.ic_work, true)
     data object Funds : BottomNavItem(AppString.funds, AppDrawable.ic_currency_rupee, false)
